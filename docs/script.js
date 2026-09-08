@@ -1,4 +1,4 @@
-// Mirrors the window logic in cycleclock/core.py, so the page can show
+// Mirrors the window logic in compute/core.py, so the page can show
 // which part of the cycle is live right now (all times UTC).
 (function () {
   const MATRIX_CLOSE = 4 * 86400 + 8 * 3600;       // Friday 17:00

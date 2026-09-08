@@ -17,7 +17,7 @@
     <nav>
       <a href="#how-it-works">how it works</a>
       <a href="#who-its-for">who it's for</a>
-      <a href="https://github.com/fitzyracing1/cycleclock">repo</a>
+      <a href="https://github.com/fitzyracing1/compute">repo</a>
     </nav>
   </div>
 </header>
@@ -124,9 +124,9 @@
 
   <section class="prose wrap" id="get-started">
     <p class="kicker">get started</p>
-    <pre><code>pip install cycleclock</code></pre>
+    <pre><code>pip install compute</code></pre>
     <pre><code>from datetime import datetime, timezone
-from cycleclock import CycleClock
+from compute import CycleClock
 
 clock = CycleClock()
 now = datetime.now(timezone.utc)
@@ -134,7 +134,7 @@ now = datetime.now(timezone.utc)
 clock.matrix_active(now)      # is the compute layer up?
 clock.services_active(now)    # is the application layer taking work?
 clock.next_boundary(now)      # when does that next flip?</code></pre>
-    <p><a class="repo-link" href="https://github.com/fitzyracing1/cycleclock">Read the source on GitHub</a></p>
+    <p><a class="repo-link" href="https://github.com/fitzyracing1/compute">Read the source on GitHub</a></p>
   </section>
 
 </main>
@@ -142,7 +142,7 @@ clock.next_boundary(now)      # when does that next flip?</code></pre>
 <footer class="site-footer">
   <div class="wrap">
     <span>compute</span>
-    <span>a cycleclock project</span>
+    <span>a bounded weekly clock</span>
   </div>
 </footer>
 

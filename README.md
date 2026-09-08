@@ -1,4 +1,4 @@
-# cycleclock
+# compute
 
 A bounded weekly clock, built as an alternate to continuous Unix time for
 operations that don't need it.
@@ -10,7 +10,7 @@ Unix time counts seconds continuously since 1970 in a fixed-width signed
 Year 2038 problem. Any system still relying on a 32-bit `time_t` has to
 either widen the integer or stop counting continuously.
 
-`cycleclock` takes the second path, deliberately, for workloads that never
+`compute` takes the second path, deliberately, for workloads that never
 needed continuous wall-clock time in the first place.
 
 ## How it works
@@ -53,7 +53,7 @@ everything is down. That's the reset gap between cycles.
 
 ```python
 from datetime import datetime, timezone
-from cycleclock import CycleClock
+from compute import CycleClock
 
 clock = CycleClock()
 now = datetime.now(timezone.utc)
@@ -89,7 +89,7 @@ absolute_time = epoch_anchor + cycle_id * WEEK + offset_seconds
 
 That translation layer can use arbitrary-precision integers, so it's
 never the thing that overflows; only the operational counters inside a
-`cycleclock`-based system stay bounded.
+`compute`-based system stay bounded.
 
 ## Site
 
@@ -99,7 +99,7 @@ build step — GitHub Pages can serve it directly.
 
 To turn it on: repo **Settings → Pages → Build and deployment → Deploy
 from a branch**, branch `main`, folder `/docs`. It'll be live at
-`https://fitzyracing1.github.io/cycleclock/`.
+`https://fitzyracing1.github.io/compute/`.
 
 To preview locally:
 

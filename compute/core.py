@@ -1,8 +1,8 @@
 """
-cycleclock — a bounded weekly clock.
+compute — a bounded weekly clock.
 
 Standard Unix time counts seconds continuously since 1970 in a fixed-width
-signed integer, which is what overflows on 2038-01-19. cycleclock splits
+signed integer, which is what overflows on 2038-01-19. compute splits
 time into two numbers instead of one running counter:
 
   cycle_id  Increments once per week, at Monday 09:00. Because it only

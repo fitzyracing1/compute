@@ -2,7 +2,7 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 
-from cycleclock import CycleClock, CycleTime, EPOCH_ANCHOR
+from compute import CycleClock, CycleTime, EPOCH_ANCHOR
 
 clock = CycleClock()
 
