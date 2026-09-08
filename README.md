@@ -91,10 +91,26 @@ That translation layer can use arbitrary-precision integers, so it's
 never the thing that overflows; only the operational counters inside a
 `cycleclock`-based system stay bounded.
 
+## Site
+
+`docs/` holds the project site (hero, week-strip visual, live cycle
+indicator, walkthrough of the mechanism). It's a static site with no
+build step — GitHub Pages can serve it directly.
+
+To turn it on: repo **Settings → Pages → Build and deployment → Deploy
+from a branch**, branch `main`, folder `/docs`. It'll be live at
+`https://fitzyracing1.github.io/cycleclock/`.
+
+To preview locally:
+
+```bash
+cd docs && python3 -m http.server 8000
+```
+
 ## Status
 
 Early — the core clock and window logic are implemented and tested.
-Not yet packaged for PyPI.
+Not yet packaged for PyPI. Site not yet deployed (see above).
 
 ## License
 

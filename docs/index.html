@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compute — a clock built to run out of room on purpose</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <span class="wordmark">compute</span>
+    <nav>
+      <a href="#how-it-works">how it works</a>
+      <a href="#who-its-for">who it's for</a>
+      <a href="https://github.com/fitzyracing1/cycleclock">repo</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero wrap">
+    <h1>A clock built to run out of room<br>on purpose.</h1>
+    <p class="lede">
+      Unix time counts seconds continuously since 1970, in a counter
+      that runs out of room on 2038-01-19. This one resets every week,
+      by design, so it never gets there.
+    </p>
+  </section>
+
+  <section class="week wrap" aria-label="weekly cycle">
+    <div class="week-strip" id="week-strip">
+      <div class="day" data-state="matrix-open" style="--w: 1">
+        <span class="day-name">Mon</span>
+        <span class="day-time">09:00</span>
+      </div>
+      <div class="day" data-state="matrix-open" style="--w: 1">
+        <span class="day-name"></span>
+        <span class="day-time">17:00</span>
+      </div>
+      <div class="day" data-state="quiet" style="--w: 3">
+        <span class="day-name">Tue – Thu</span>
+        <span class="day-time">matrix up, services quiet</span>
+      </div>
+      <div class="day" data-state="matrix-open" style="--w: 1">
+        <span class="day-name">Fri</span>
+        <span class="day-time">09:00</span>
+      </div>
+      <div class="day" data-state="down" style="--w: 2">
+        <span class="day-name">Sat – Sun</span>
+        <span class="day-time">down · 17:00 → 09:00</span>
+      </div>
+    </div>
+    <ul class="legend">
+      <li><span class="dot dot-open"></span> services active</li>
+      <li><span class="dot dot-quiet"></span> matrix up, services quiet</li>
+      <li><span class="dot dot-down"></span> fully down</li>
+    </ul>
+  </section>
+
+  <section class="prose wrap" id="the-problem">
+    <p class="kicker">the problem</p>
+    <p>
+      A 32-bit signed Unix timestamp is a single number that has been
+      counting up since 1970 and never stops. It has a ceiling, and
+      that ceiling arrives on 2038-01-19. Anything still reading time
+      that way has to either widen the integer or stop counting
+      continuously.
+    </p>
+  </section>
+
+  <section class="prose wrap" id="how-it-works">
+    <p class="kicker">how it works</p>
+    <p>
+      Time is split into two numbers instead of one running counter.
+    </p>
+    <dl class="terms">
+      <div>
+        <dt>cycle_id</dt>
+        <dd>Increments once per week, at Monday 09:00. Ticking once a
+        week instead of once a second means a 32-bit cycle_id doesn't
+        run out of room for roughly 41 million years.</dd>
+      </div>
+      <div>
+        <dt>offset</dt>
+        <dd>Seconds since the current cycle's matrix window opened.
+        Resets to zero every Monday 09:00, so it never accumulates
+        toward an overflow point — the matrix window is at most
+        374,400 seconds, comfortably under 2¹⁹.</dd>
+      </div>
+    </dl>
+    <p>
+      Each week nests two windows: the <strong>matrix window</strong>
+      (Monday 09:00 to Friday 17:00, the compute layer is up), and the
+      <strong>services window</strong> inside it (Monday 09:00–17:00
+      and Friday 09:00–17:00, when the application layer takes work).
+      Outside the matrix window — Friday 17:00 to the following Monday
+      09:00 — everything is down. That gap is the reset between cycles.
+    </p>
+    <p>
+      Anything that needs a real calendar date still can — one
+      translation function handles it, using arbitrary-precision
+      integers so it's never the thing that overflows:
+    </p>
+    <pre><code>absolute_time = epoch_anchor + cycle_id * WEEK + offset_seconds</code></pre>
+  </section>
+
+  <section class="prose wrap" id="who-its-for">
+    <p class="kicker">who it's for</p>
+    <ul class="plain-list">
+      <li>Batch or scheduled compute that only needs to know how far
+      into the current work window it is, not the absolute date.</li>
+      <li>Edge or embedded devices that don't need wall-clock accuracy
+      — just a bounded, self-resetting operational cycle.</li>
+      <li>Systems where downtime is already scheduled, so the weekend
+      reset gap costs nothing extra.</li>
+    </ul>
+  </section>
+
+  <section class="prose wrap" id="get-started">
+    <p class="kicker">get started</p>
+    <pre><code>pip install cycleclock</code></pre>
+    <pre><code>from datetime import datetime, timezone
+from cycleclock import CycleClock
+
+clock = CycleClock()
+now = datetime.now(timezone.utc)
+
+clock.matrix_active(now)      # is the compute layer up?
+clock.services_active(now)    # is the application layer taking work?
+clock.next_boundary(now)      # when does that next flip?</code></pre>
+    <p><a class="repo-link" href="https://github.com/fitzyracing1/cycleclock">Read the source on GitHub</a></p>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>compute</span>
+    <span>a cycleclock project</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
