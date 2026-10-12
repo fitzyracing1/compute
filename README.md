@@ -115,3 +115,8 @@ Not yet packaged for PyPI. Site not yet deployed (see above).
 ## License
 
 MIT
+
+## Documentation
+
+- In-repo docs: [docs/](docs/index.md)
+- Wiki: [https://github.com/fitzyracing1/compute/wiki](https://github.com/fitzyracing1/compute/wiki)
